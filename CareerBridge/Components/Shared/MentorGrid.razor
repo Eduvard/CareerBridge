@@ -1,0 +1,13 @@
+﻿@using CareerBridge.Data
+
+<div class="mentor-grid">
+    @foreach (var mentor in Mentors)
+    {
+        <MentorCard Mentor="@mentor" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public List<Mentor> Mentors { get; set; }
+}

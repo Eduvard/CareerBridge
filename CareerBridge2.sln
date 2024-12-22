@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34322.80
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CareerBridge", "CareerBridge\CareerBridge.csproj", "{FDB78E55-932B-4990-9FF1-5FA5E753DF0A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FDB78E55-932B-4990-9FF1-5FA5E753DF0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDB78E55-932B-4990-9FF1-5FA5E753DF0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDB78E55-932B-4990-9FF1-5FA5E753DF0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDB78E55-932B-4990-9FF1-5FA5E753DF0A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {65BC0404-C290-450F-98A8-C5B4125691C4}
+	EndGlobalSection
+EndGlobal

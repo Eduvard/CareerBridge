@@ -1,0 +1,26 @@
+﻿@page "/Header"
+@using CareerBridge.Components.Layout
+
+
+<nav class="header-nav">
+    <div class="logo">
+        <a href="/Home">
+            <img src="/careerbridge.jpg" alt="Career Bridge Logo" />
+        </a>
+    </div>
+    <ul class="nav-links">
+        <li><NavLink href="/success-stories">Success Stories</NavLink></li>
+        <li><NavLink href="/career-articles">Career Articles</NavLink></li>
+        <li><NavLink href="/ask-learn">Ask & Learn</NavLink></li>
+        <li><NavLink href="/pathfinder-quiz">Pathfinder Quiz</NavLink></li>
+    </ul>
+    <div class="user-actions">
+        <a href="/">Log Out</a>
+        <div class="language-selector">
+            <select>
+                <option value="en">English</option>
+                <option value="fr">French</option>
+            </select>
+        </div>
+    </div>
+</nav>

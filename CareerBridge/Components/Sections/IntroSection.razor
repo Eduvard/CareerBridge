@@ -1,0 +1,41 @@
+﻿@using CareerBridge.Data
+@inject NavigationManager NavigationManager
+
+<section class="intro-section">
+    <div class="intro-content">
+        <h1>Your Career is a Journey, Not a Destination. Enjoy Every Step Along the Way With Us.</h1>
+        <a href="/signup" class="btn btn-primary">Join the Community</a>
+    </div>
+    <div class="intro-image">
+        <img src="/360_F_599818692_HlupyOiAXWTUcVOsWXT66HCKyMTLrjSG.jpg" alt="Students walking together" />
+    </div>
+
+    <!-- Include Sign-Up Modal -->
+    @if (IsSignUpModalOpen)
+    {
+        <div class="modal-backdrop">
+            <div class="modal-content">
+                <SignUp OnClose="@CloseSignUpModal" />
+            </div>
+        </div>
+    }
+</section>
+
+@code {
+    private bool IsSignUpModalOpen = false;
+
+    private void OpenSignUpModal()
+    {
+        IsSignUpModalOpen = true;
+    }
+
+    private void CloseSignUpModal()
+    {
+        IsSignUpModalOpen = false;
+    }
+
+    private void NavigateToSignUp()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}

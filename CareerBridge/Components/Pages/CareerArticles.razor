@@ -1,0 +1,68 @@
+﻿@page "/career-articles"
+@using CareerBridge.Data
+
+<Header />
+<section class="article-section"> 
+    <h1>Career Articles</h1>
+
+    <!-- Search Bar and Categories -->
+    <div class="article-controls">
+        <input type="text" placeholder="Search articles..." @bind="SearchQuery" @bind:event="oninput" class="search-bar" />
+        <div class="categories">
+            @foreach (var category in Categories)
+            {
+                <button class="category-btn @(SelectedCategory == category ? "active" : "")" @onclick="() => FilterArticlesByCategory(category)">
+                    @category
+                </button>
+            }
+        </div>
+    </div>
+
+    <!-- Articles Grid -->
+    <div class="article-grid">
+        @if (FilteredArticles.Count == 0)
+        {
+            <p>No articles found matching your criteria.</p>
+        }
+        else
+        {
+            @foreach (var article in FilteredArticles)
+            {
+                <div class="article-card">
+                    <img src="@article.ImageUrl" alt="@article.Title" />
+                    <div class="article-info">
+                        <h3>@article.Title</h3>
+                        <p>@article.Description</p>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</section>
+<Footer />
+
+@code {
+    // Placeholder Articles List
+    private List<Article> ArticleList = new List<Article>
+    {
+        new Article { Title = "Transforming Architectural Education", Category = "Technology", Description = "Learn how augmented and virtual reality is reshaping architectural education.", ImageUrl = "transforming-architectural-education-with-augmented-and-virtual-reality_1.jpg" },
+        new Article { Title = "Computer Programmer: Skills & Salary in 2024", Category = "Technology", Description = "Explore the key skills and salary expectations for programmers.", ImageUrl = "imageedit_2_4797496230.jpg" },
+        new Article { Title = "Genome-wide Analysis", Category = "Biology", Description = "Dive into the world of genome-wide analysis and molecular systems.", ImageUrl = "imageedit_4_2282899691.jpg" },
+        new Article { Title = "How Sports Help Students Academically", Category = "Sports", Description = "Understand the positive impact of sports on academic success.", ImageUrl = "imageedit_6_4875872396.jpg" }
+    };
+
+    // Categories
+    private List<string> Categories = new List<string> { "All", "Technology", "Biology", "Sports", "Engineering", "Arts" };
+    private string SelectedCategory = "All";
+    private string SearchQuery = string.Empty;
+
+    // Filtered Articles
+    private List<Article> FilteredArticles => ArticleList
+        .Where(a => (SelectedCategory == "All" || a.Category == SelectedCategory) &&
+                    (string.IsNullOrWhiteSpace(SearchQuery) || a.Title.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase))).ToList();
+
+    private void FilterArticlesByCategory(string category)
+    {
+        SelectedCategory = category;
+    }
+}

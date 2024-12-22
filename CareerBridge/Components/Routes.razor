@@ -1,0 +1,19 @@
+﻿<Router AppAssembly="@typeof(Program).Assembly">
+    <Found Context="routeData">
+        <!-- Dynamically load the route with the specified layout -->
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)" />
+
+        <!-- Ensure focus is shifted to the main heading on navigation -->
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <!-- Display a user-friendly "Page Not Found" message -->
+        <Layout.MainLayout>
+            <div class="not-found">
+                <h1>Page Not Found</h1>
+                <p>Sorry, the page you're looking for doesn't exist.</p>
+                <a href="/" class="btn btn-primary">Return to Home</a>
+            </div>
+        </Layout.MainLayout>
+    </NotFound>
+</Router>

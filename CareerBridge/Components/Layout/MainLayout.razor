@@ -1,0 +1,34 @@
+﻿@using CareerBridge.Components.Shared
+@inject NavigationManager NavigationManager
+@inherits LayoutComponentBase
+
+@if (ShouldShowHeaderFooter())
+{
+    <Header />
+}
+
+<main>
+    @Body
+</main>
+
+@if (ShouldShowHeaderFooter())
+{
+    <Footer />
+}
+
+@code {
+    private bool ShouldShowHeaderFooter()
+    {
+        // Get the current relative path of the page
+        var currentPath = NavigationManager.Uri.ToLower();
+
+        // Specify the route(s) where Header and Footer should not appear
+        var excludedPaths = new List<string>
+        {
+            "/", "/login" // The Sign-Up page route
+        };
+
+        // Check if the current page matches any of the excluded paths
+        return !excludedPaths.Any(path => currentPath.EndsWith(path));
+    }
+}

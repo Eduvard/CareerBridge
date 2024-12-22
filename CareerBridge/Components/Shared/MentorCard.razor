@@ -1,0 +1,12 @@
+﻿<div class="mentor-card">
+    <img src="@Mentor.ImageUrl" alt="@Mentor.Name" />
+    <div class="mentor-info">
+        <h3>@Mentor.Name</h3>
+        <p>@Mentor.Title</p>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Mentor Mentor { get; set; }
+}

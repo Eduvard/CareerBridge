@@ -1,0 +1,133 @@
+﻿@page "/interests-quiz"
+@inject HttpClient HttpClient
+
+<h1>Interests Quiz</h1>
+<p>Answer the following questions about your hobbies and interests to receive AI-generated career advice!</p>
+
+<EditForm Model="@quizAnswers" OnValidSubmit="SubmitQuiz" FormName="InterestQuizForm">
+    @foreach (var question in Questions)
+    {
+        <div class="question-block">
+            <h3>@question.QuestionText</h3>
+            @foreach (var option in question.Options)
+            {
+                <div>
+                    <input type="radio" id="@option" name="question-@Questions.IndexOf(question)"
+                           @bind="quizAnswers[Questions.IndexOf(question)]" />
+                    <label for="@option">@option</label>
+                </div>
+            }
+        </div>
+    }
+
+    <button type="submit" class="btn-submit" disabled="@isLoading">
+        @(isLoading ? "Loading..." : "Submit")
+    </button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(careerAdvice))
+{
+    <div class="result">
+        <h2>AI-Generated Career Advice</h2>
+        <p>@careerAdvice</p>
+    </div>
+}
+
+@code {
+    private string[] quizAnswers = new string[5];
+    private string careerAdvice = string.Empty;
+    private bool isLoading = false;
+
+    private List<Question> Questions = new List<Question>
+    {
+        new Question
+        {
+            QuestionText = "What do you enjoy doing in your free time?",
+            Options = new List<string> { "Reading books", "Playing sports", "Drawing or painting", "Solving puzzles" }
+        },
+        new Question
+        {
+            QuestionText = "Which activity do you find most exciting?",
+            Options = new List<string> { "Exploring new places", "Organizing events", "Building things", "Teaching others" }
+        },
+        new Question
+        {
+            QuestionText = "How do you usually spend your weekends?",
+            Options = new List<string> { "Hiking in nature", "Writing stories or blogs", "Working on DIY projects", "Volunteering in the community" }
+        },
+        new Question
+        {
+            QuestionText = "Which type of work environment do you prefer?",
+            Options = new List<string> { "Quiet and focused", "Team-oriented and social", "Hands-on and practical", "Dynamic and fast-paced" }
+        },
+        new Question
+        {
+            QuestionText = "What do you enjoy learning about?",
+            Options = new List<string> { "History and culture", "Science and technology", "Art and design", "Leadership and management" }
+        }
+    };
+
+    private async Task SubmitQuiz()
+    {
+        isLoading = true;
+
+        // Combine quiz answers into a single string to send to the AI
+        var input = string.Join(", ", quizAnswers);
+
+        // Call AI API
+        try
+        {
+            careerAdvice = await GetCareerAdviceFromAI(input);
+        }
+        catch (Exception ex)
+        {
+            careerAdvice = "Failed to get advice. Please try again later.";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task<string> GetCareerAdviceFromAI(string input)
+    {
+        var apiKey = "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; // Replace with your OpenAI API key
+        var url = "https://api.openai.com/v1/completions";
+
+        using var request = new HttpRequestMessage(HttpMethod.Post, url);
+        request.Headers.Add("Authorization", $"Bearer {apiKey}");
+
+        var data = new
+        {
+            model = "text-davinci-003",
+            prompt = $"Based on the following interests and hobbies: {input}, provide personalized career advice.",
+            max_tokens = 150,
+            temperature = 0.7
+        };
+
+        request.Content = new StringContent(JsonSerializer.Serialize(data), Encoding.UTF8, "application/json");
+
+        using var response = await HttpClient.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+
+        var responseBody = await response.Content.ReadAsStringAsync();
+        var completionResult = JsonSerializer.Deserialize<OpenAIResponse>(responseBody);
+        return completionResult.Choices.FirstOrDefault()?.Text.Trim() ?? "No advice available.";
+    }
+
+    private class OpenAIResponse
+    {
+        public Choice[] Choices { get; set; }
+    }
+
+    private class Choice
+    {
+        public string Text { get; set; }
+    }
+
+    private class Question
+    {
+        public string QuestionText { get; set; }
+        public List<string> Options { get; set; }
+    }
+}

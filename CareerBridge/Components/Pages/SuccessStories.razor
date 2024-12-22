@@ -1,0 +1,101 @@
+﻿@page "/success-stories"
+@using CareerBridge.Data
+
+<Header />
+
+<!-- Mentors Section -->
+<section class="mentor-section">
+    <h1>Meet Your Career Mentors</h1>
+    <p>Connect with experts across professions to guide your journey toward success.</p>
+    <div class="mentor-grid">
+        @foreach (var mentor in MentorList)
+        {
+            <div class="mentor-card">
+                <img src="@mentor.ImageUrl" alt="@mentor.Name" />
+                <div class="mentor-info">
+                    <h3>@mentor.Name</h3>
+                    <p>@mentor.Title</p>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+
+
+<section class="video-section">
+    <h2>Video Presentations</h2>
+
+    <!-- Search Bar and Categories -->
+    <div class="video-controls">
+        <input type="text" @bind="SearchQuery" @bind:event="oninput" placeholder="Search" class="search-bar" />
+        <div class="categories">
+            @foreach (var category in Categories)
+            {
+                <button class="category-btn @(SelectedCategory == category ? "active" : "")" @onclick="() => FilterVideosByCategory(category)">
+                    @category
+                </button>
+            }
+        </div>
+    </div>
+
+    <!-- Video Grid -->
+    <div class="video-grid">
+        @if (FilteredVideos.Count == 0)
+        {
+            <p>No videos found matching your criteria.</p>
+        }
+        else
+        {
+            @foreach (var video in FilteredVideos)
+            {
+                <div class="video-card">
+                    <video controls>
+                        <source src="@video.Url" type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+                    <h3>@video.Title</h3>
+                </div>
+            }
+        }
+    </div>
+</section>
+<Footer />
+
+@code {
+    // Mentors
+    private List<Mentor> MentorList = new List<Mentor>
+    {
+        new Mentor { Name = "David Hakobyan", Title = "Data Scientist, Microsoft", ImageUrl = "/gabriel-macht-ftr.jpg" },
+        new Mentor { Name = "Ara Petrosyan", Title = "Surgeon, Healthcare Specialist", ImageUrl = "/rs_1200x1200-220706111618-1200-red-carpet-Alexander-Ludwig.webp" },
+        new Mentor { Name = "Lilit Gevorgyan", Title = "Marketing Strategist, Adidas", ImageUrl = "/51jovjtEWlL.jpg" }
+    };
+    // Variables
+    private string SelectedCategory = "All";
+    private string SearchQuery = string.Empty;
+
+    // Categories
+    private List<string> Categories = new List<string>
+    {
+        "All", "Business", "Healthcare", "Engineering", "Arts"
+    };
+
+    // Video List
+    private List<Video> VideoList = new List<Video>
+    {
+        new Video { Title = "Business Strategy", Category = "Business", Url = "videos/business.mp4" },
+        new Video { Title = "AI in Healthcare", Category = "Healthcare", Url = "videos/healthcare.mp4" },
+        new Video { Title = "Engineering Innovations", Category = "Engineering", Url = "videos/engineering.mp4" },
+        new Video { Title = "Creative Arts", Category = "Arts", Url = "videos/arts.mp4" }
+    };
+
+    // Filtered Videos
+    private List<Video> FilteredVideos => VideoList
+        .Where(v => (SelectedCategory == "All" || v.Category == SelectedCategory) &&
+                    (string.IsNullOrWhiteSpace(SearchQuery) ||  v.Title.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase))).ToList();
+
+    private void FilterVideosByCategory(string category)
+    {
+        SelectedCategory = category;
+    }
+}
